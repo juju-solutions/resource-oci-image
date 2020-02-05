@@ -20,7 +20,7 @@ class OCIImageResource(Object):
         try:
             resource_data = yaml.safe_load(resource_text)
         except yaml.YAMLError as e:
-            raise InvalidResourceError(self.resource_name)
+            raise InvalidResourceError(self.resource_name) from e
         else:
             return ImageInfo(resource_data)
 
@@ -48,11 +48,18 @@ class ImageInfo(dict):
         return self['password']
 
 
-class MissingResourceError(ModelError):
+class ResourceError(ModelError):
+    status_type = BlockedStatus
+    status_message = 'Resource error'
+
     def __init__(self, resource_name):
-        super().__init__(resource_name, BlockedStatus(f'Missing resource: {resource_name}'))
+        super().__init__(resource_name)
+        self.status = self.status_type(f'{self.status_message}: {resource_name}')
+
+
+class MissingResourceError(ModelError):
+    status_message = 'Missing resource'
 
 
 class InvalidResourceError(ModelError):
-    def __init__(self, resource_name):
-        super().__init__(resource_name, BlockedStatus(f'Invalid resource: {resource_name}'))
+    status_message = 'Invalid resource'
