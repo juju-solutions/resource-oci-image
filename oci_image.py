@@ -27,8 +27,9 @@ class OCIImageResource(Object):
 
 class ImageInfo(dict):
     def __init__(self, data):
-        # Translate the data from the format used by the charm store to the format
-        # used by the Juju K8s pod spec, since that is how this is typically used.
+        # Translate the data from the format used by the charm store to the
+        # format used by the Juju K8s pod spec, since that is how this is
+        # typically used.
         super().__init__({
             'imagePath': data['registrypath'],
             'username': data['username'],
@@ -48,18 +49,19 @@ class ImageInfo(dict):
         return self['password']
 
 
-class ResourceError(ModelError):
+class OCIImageResourceError(ModelError):
     status_type = BlockedStatus
     status_message = 'Resource error'
 
     def __init__(self, resource_name):
         super().__init__(resource_name)
-        self.status = self.status_type(f'{self.status_message}: {resource_name}')
+        self.status = self.status_type(
+            f'{self.status_message}: {resource_name}')
 
 
-class MissingResourceError(ModelError):
+class MissingResourceError(OCIImageResourceError):
     status_message = 'Missing resource'
 
 
-class InvalidResourceError(ModelError):
+class InvalidResourceError(OCIImageResourceError):
     status_message = 'Invalid resource'
