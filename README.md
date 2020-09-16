@@ -5,15 +5,22 @@ framework.
 
 ## Installation
 
-It will need to be vendored into your charm, using something like:
+Add it to your `requirements.txt`.  Since it's not in PyPI, you'll need to use
+the GitHub archive URL (or `git+` URL, if you want to pin to a specific commit):
 
 ```
-pip install --target ./env git+https://github.com/juju-solutions/resource-oci-image
+https://github.com/johnsca/resource-oci-image/archive/master.zip
 ```
 
 ## Usage
 
-You can use this within your charm class like so:
+The `OCIImageResource` class will wrap the framework resource for the given
+resource name, and calling `fetch` on it will either return the image info
+or raise an `OCIImageResourceError` if it can't fetch or parse the image
+info. The exception will have a `status` attribute you can use directly,
+or a `status_message` attribute if you just want that.
+
+Example usage:
 
 ```python
 from ops.charm import CharmBase
@@ -30,8 +37,14 @@ class MyCharm(CharmBase):
         try:
             image_info = self.image.fetch()
         except OCIImageResourceError as e:
-            self.status = e.status
+            self.model.unit.status = e.status
             event.defer()
+            return
+
+        self.model.pod.set_spec({'containers': [{
+            'name': 'my-charm',
+            'imageDetails': image_info,
+        }]})
 
 if __name__ == "__main__":
     main(MyCharm)

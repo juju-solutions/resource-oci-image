@@ -11,7 +11,10 @@ class OCIImageResource(Object):
         self.resource_name = resource_name
 
     def fetch(self):
-        resource_path = self.model.resources.fetch(self.resource_name)
+        try:
+            resource_path = self.model.resources.fetch(self.resource_name)
+        except ModelError as e:
+            raise MissingResourceError(self.resource_name) from e
         if not resource_path.exists():
             raise MissingResourceError(self.resource_name)
         resource_text = Path(resource_path).read_text()
@@ -22,31 +25,14 @@ class OCIImageResource(Object):
         except yaml.YAMLError as e:
             raise InvalidResourceError(self.resource_name) from e
         else:
-            return ImageInfo(resource_data)
-
-
-class ImageInfo(dict):
-    def __init__(self, data):
-        # Translate the data from the format used by the charm store to the
-        # format used by the Juju K8s pod spec, since that is how this is
-        # typically used.
-        super().__init__({
-            'imagePath': data['registrypath'],
-            'username': data['username'],
-            'password': data['password'],
-        })
-
-    @property
-    def image_path(self):
-        return self['imagePath']
-
-    @property
-    def username(self):
-        return self['username']
-
-    @property
-    def password(self):
-        return self['password']
+            # Translate the data from the format used by the charm store to the
+            # format used by the Juju K8s pod spec, since that is how this is
+            # typically used.
+            return {
+                'imagePath': resource_data['registrypath'],
+                'username': resource_data['username'],
+                'password': resource_data['password'],
+            }
 
 
 class OCIImageResourceError(ModelError):
