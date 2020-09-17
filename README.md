@@ -9,7 +9,7 @@ Add it to your `requirements.txt`.  Since it's not in PyPI, you'll need to use
 the GitHub archive URL (or `git+` URL, if you want to pin to a specific commit):
 
 ```
-https://github.com/johnsca/resource-oci-image/archive/master.zip
+https://github.com/juju-solutions/resource-oci-image/archive/master.zip
 ```
 
 ## Usage
