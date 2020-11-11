@@ -42,7 +42,7 @@ class OCIImageResourceError(ModelError):
     def __init__(self, resource_name):
         super().__init__(resource_name)
         self.status = self.status_type(
-            f'{self.status_message}: {resource_name}')
+            '{}: {}'.format(self.status_message, resource_name))
 
 
 class MissingResourceError(OCIImageResourceError):
