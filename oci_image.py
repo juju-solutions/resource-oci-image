@@ -28,16 +28,24 @@ class OCIImageResource(Object):
         else:
             # Translate the data from the format used by the charm store to the
             # format used by the Juju K8s pod spec, since that is how this is
-            # typically used.
+            # typically used:
+            # {
+            #   'imagePath': image,
+            #   'password': pwd,
+            #   'username': user
+            # }
+            # where imagePath is the only mandatory field.
+            image_info = {}
             try:
-                registry_path = resource_data['registrypath']
+                image_info['imagePath'] = resource_data['registrypath']
             except KeyError as e:
                 raise InvalidResourceError(self.resource_name) from e
-            return {
-                'imagePath': registry_path,
-                'username': resource_data.get('username', ''),
-                'password': resource_data.get('password', ''),
-            }
+
+            if 'username' in resource_data:
+                image_info['username'] = resource_data['username']
+            if 'password' in resource_data:
+                image_info['password'] = resource_data['password']
+            return image_info
 
 
 class OCIImageResourceError(ModelError):

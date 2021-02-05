@@ -31,7 +31,7 @@ Example usage:
 ```python
 from ops.charm import CharmBase
 from ops.main import main
-from src.oci_image import OCIImageResource, OCIImageResourceError
+from oci_image import OCIImageResource, OCIImageResourceError
 
 
 class MyCharm(CharmBase):

@@ -4,7 +4,7 @@ from unittest import mock
 
 from ops.model import ModelError
 
-from src.oci_image import OCIImageResource
+from oci_image import OCIImageResource
 
 
 class TestOCIImageResource(unittest.TestCase):
@@ -207,8 +207,6 @@ class TestOCIImageResource(unittest.TestCase):
         self.assertDictEqual(
             image_info,
             {
-                'imagePath': image,
-                'password': '',
-                'username': ''
+                'imagePath': image
             }
         )
