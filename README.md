@@ -12,6 +12,12 @@ the GitHub archive URL (or `git+` URL, if you want to pin to a specific commit):
 https://github.com/juju-solutions/resource-oci-image/archive/master.zip
 ```
 
+or 
+
+```
+git+https://github.com/juju-solutions/resource-oci-image#egg=oci-image
+```
+
 ## Usage
 
 The `OCIImageResource` class will wrap the framework resource for the given
@@ -26,6 +32,7 @@ Example usage:
 from ops.charm import CharmBase
 from ops.main import main
 from oci_image import OCIImageResource, OCIImageResourceError
+
 
 class MyCharm(CharmBase):
     def __init__(self, *args):
@@ -46,6 +53,21 @@ class MyCharm(CharmBase):
             'imageDetails': image_info,
         }]})
 
+
 if __name__ == "__main__":
     main(MyCharm)
+```
+
+## Developing
+
+Create and activate a virtualenv with the development requirements:
+
+    virtualenv -p python3 venv
+    source venv/bin/activate
+    pip install -r requirements-dev.txt
+
+## Running tests
+
+```
+bash run_tests
 ```
