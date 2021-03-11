@@ -24,10 +24,7 @@ class TestOCIImageResource(unittest.TestCase):
             resource.fetch()
 
         # Then
-        self.assertTrue(
-            'Missing resource: test-image',
-            str(context.exception)
-        )
+        self.assertTrue("Missing resource: test-image", str(context.exception))
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
@@ -37,7 +34,7 @@ class TestOCIImageResource(unittest.TestCase):
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = False
@@ -47,10 +44,7 @@ class TestOCIImageResource(unittest.TestCase):
             resource.fetch()
 
         # Then
-        self.assertTrue(
-            'Missing resource: test-image',
-            str(context.exception)
-        )
+        self.assertTrue("Missing resource: test-image", str(context.exception))
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
@@ -61,7 +55,7 @@ class TestOCIImageResource(unittest.TestCase):
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = True
@@ -72,21 +66,20 @@ class TestOCIImageResource(unittest.TestCase):
             resource.fetch()
 
         # Then
-        self.assertTrue(
-            'Missing resource: test-image',
-            str(context.exception)
-        )
+        self.assertTrue("Missing resource: test-image", str(context.exception))
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
     @mock.patch.object(Path, "read_text")
-    def test_when_resource_is_not_a_well_formatted_yaml(self, read_text, path_exists, charm):
+    def test_when_resource_is_not_a_well_formatted_yaml(
+        self, read_text, path_exists, charm
+    ):
         # Given
         resource = OCIImageResource(charm, "test-image")
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = True
@@ -101,10 +94,7 @@ class TestOCIImageResource(unittest.TestCase):
             resource.fetch()
 
         # Then
-        self.assertTrue(
-            'Invalid resource: test-image',
-            str(context.exception)
-        )
+        self.assertTrue("Invalid resource: test-image", str(context.exception))
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
@@ -115,7 +105,7 @@ class TestOCIImageResource(unittest.TestCase):
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = True
@@ -130,26 +120,20 @@ class TestOCIImageResource(unittest.TestCase):
             resource.fetch()
 
         # Then
-        self.assertTrue(
-            'Invalid resource: test-image',
-            str(context.exception)
-        )
+        self.assertTrue("Invalid resource: test-image", str(context.exception))
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
     @mock.patch.object(Path, "read_text")
     def test_when_complete_image_info_should_match_given_resource(
-        self,
-        read_text,
-        path_exists,
-        charm
+        self, read_text, path_exists, charm
     ):
         # Given
         resource = OCIImageResource(charm, "test-image")
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = True
@@ -161,36 +145,30 @@ class TestOCIImageResource(unittest.TestCase):
             "registrypath": {}
             "username": {}
             "password": {}
-        """.format(image, user, pwd)
+        """.format(
+            image, user, pwd
+        )
 
         # When
         image_info = resource.fetch()
 
         # Then
         self.assertDictEqual(
-            image_info,
-            {
-                'imagePath': image,
-                'password': pwd,
-                'username': user
-            }
+            image_info, {"imagePath": image, "password": pwd, "username": user}
         )
 
     @mock.patch("ops.charm.CharmBase")
     @mock.patch.object(Path, "exists")
     @mock.patch.object(Path, "read_text")
     def test_when_partial_image_info_should_match_given_resource(
-        self,
-        read_text,
-        path_exists,
-        charm
+        self, read_text, path_exists, charm
     ):
         # Given
         resource = OCIImageResource(charm, "test-image")
 
         # Monkeypatch fetch as we can't mock the parent Object
         def patched_fetch(name: str) -> Path:
-            return Path('/a/b/c/d/e/f')
+            return Path("/a/b/c/d/e/f")
 
         resource.model.resources.fetch = patched_fetch
         path_exists.return_value = True
@@ -198,15 +176,12 @@ class TestOCIImageResource(unittest.TestCase):
         image = "image:6.0"
         read_text.return_value = """
             "registrypath": {}
-        """.format(image)
+        """.format(
+            image
+        )
 
         # When
         image_info = resource.fetch()
 
         # Then
-        self.assertDictEqual(
-            image_info,
-            {
-                'imagePath': image
-            }
-        )
+        self.assertDictEqual(image_info, {"imagePath": image})

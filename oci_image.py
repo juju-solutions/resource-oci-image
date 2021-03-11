@@ -37,30 +37,31 @@ class OCIImageResource(Object):
             # where imagePath is the only mandatory field.
             image_info = {}
             try:
-                image_info['imagePath'] = resource_data['registrypath']
+                image_info["imagePath"] = resource_data["registrypath"]
             except KeyError as e:
                 raise InvalidResourceError(self.resource_name) from e
 
-            if 'username' in resource_data:
-                image_info['username'] = resource_data['username']
-            if 'password' in resource_data:
-                image_info['password'] = resource_data['password']
+            if "username" in resource_data:
+                image_info["username"] = resource_data["username"]
+            if "password" in resource_data:
+                image_info["password"] = resource_data["password"]
             return image_info
 
 
 class OCIImageResourceError(ModelError):
     status_type = BlockedStatus
-    status_message = 'Resource error'
+    status_message = "Resource error"
 
     def __init__(self, resource_name):
         super().__init__(resource_name)
         self.status = self.status_type(
-            '{}: {}'.format(self.status_message, resource_name))
+            "{}: {}".format(self.status_message, resource_name)
+        )
 
 
 class MissingResourceError(OCIImageResourceError):
-    status_message = 'Missing resource'
+    status_message = "Missing resource"
 
 
 class InvalidResourceError(OCIImageResourceError):
-    status_message = 'Invalid resource'
+    status_message = "Invalid resource"

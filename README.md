@@ -3,22 +3,10 @@
 This is a helper for working with OCI image resources in the charm operator
 framework.
 
-## Installation
-
-Add it to your `requirements.txt`.  Since it's not in PyPI, you'll need to use
-the GitHub archive URL (or `git+` URL, if you want to pin to a specific commit):
-
-```
-https://github.com/juju-solutions/resource-oci-image/archive/master.zip
-```
-
-or 
-
-```
-git+https://github.com/juju-solutions/resource-oci-image#egg=oci-image
-```
 
 ## Usage
+
+Add this to your charm by including `oci-image` in your `requirements.txt` file.
 
 The `OCIImageResource` class will wrap the framework resource for the given
 resource name, and calling `fetch` on it will either return the image info
@@ -38,9 +26,9 @@ class MyCharm(CharmBase):
     def __init__(self, *args):
         super().__init__(*args)
         self.image = OCIImageResource(self, 'resource-name')
-        self.framework.observe(self.on.start, self.on_start)
+        self.framework.observe(self.on.start, self._on_start)
 
-    def on_start(self, event):
+    def _on_start(self, event):
         try:
             image_info = self.image.fetch()
         except OCIImageResourceError as e:
@@ -60,14 +48,4 @@ if __name__ == "__main__":
 
 ## Developing
 
-Create and activate a virtualenv with the development requirements:
-
-    virtualenv -p python3 venv
-    source venv/bin/activate
-    pip install -r requirements-dev.txt
-
-## Running tests
-
-```
-bash run_tests
-```
+Tests can be run with [tox](https://tox.readthedocs.io/en/latest/).

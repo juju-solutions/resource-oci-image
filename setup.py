@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 SETUP = {
-    'name': "oci_image",
+    'name': "oci-image",
     'version': '1.0.0',
     'author': "Cory Johns",
     'author_email': "johnsca@gmail.com",
@@ -11,6 +11,7 @@ SETUP = {
     'install_requires': [
     ],
     'license': "Apache License 2.0",
+    "long_description_content_type": "text/markdown",
     'long_description': open('README.md').read(),
     'description': 'Helper for dealing with OCI Image resources in '
                    'the charm operator framework',
