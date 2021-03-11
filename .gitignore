@@ -1,7 +1,7 @@
-/venv
-*.py[cod]
-*.charm
+.tox/
+__pycache__/
+*.pyc
 build/
-__pycache__
-.idea
-.coverage
+dist/
+*.charm
+*.egg-info
